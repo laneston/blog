@@ -53,7 +53,7 @@ docker version
 # 镜像
 
 
-拉取最新镜像：
+## 拉取最新镜像
 
 
 ```
@@ -63,4 +63,23 @@ latest: Pulling from library/ubuntu
 Digest: sha256:bea6d19168bbfd6af8d77c2cc3c572114eb5d113e6f422573c93cb605a0e2ffb
 Status: Downloaded newer image for ubuntu:latest
 docker.io/library/ubuntu:latest
+```
+
+
+## 查看镜像
+
+```
+docker images
+```
+
+## 进入容器
+
+```
+docker run -it ubuntu
+```
+
+## 退出镜像
+
+```
+exit
 ```
