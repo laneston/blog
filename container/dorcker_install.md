@@ -83,3 +83,28 @@ docker run -it ubuntu
 ```
 exit
 ```
+
+
+
+# ubuntu 环境下安装
+
+本人使用的是 Windows 自带的子系统 WSL。
+
+
+找到对应环境下的安装包：
+https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/
+
+
+执行以下安装命令:
+
+```
+sudo apt-get update
+sudo apt-get install ./containerd.io_1.5.11-1_amd64.deb
+sudo apt-get install ./docker-ce-cli_20.10.9_3-0_ubuntu-bionic_amd64.deb ./docker-ce_20.10.9_3-0_ubuntu-bionic_amd64.deb ./docker-scan-plugin_0.17.0_ubuntu-bionic_amd64.deb ./docker-ce-rootless-extras_20.10.9_3-0_ubuntu-bionic_amd64.deb ./docker-compose-plugin_2.3.3_ubuntu-bionic_amd64.deb
+```
+
+启动 docker:
+
+```
+sudo /etc/init.d/docker start
+```
