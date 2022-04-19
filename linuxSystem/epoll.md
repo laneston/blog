@@ -103,5 +103,5 @@ int epoll_wait(int epfd, struct epoll_event *events,int maxevents, int timeout);
 
 返回值：
 
-- >=0，表示准备就绪的文件描述符个数
-- -1：出错，errno被设置
+- \>=0，表示准备就绪的文件描述符个数;
+- -1：出错，errno被设置。
