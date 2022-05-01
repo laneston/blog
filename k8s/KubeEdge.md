@@ -84,8 +84,17 @@ linux 修改开机启动参数后，使用grub2-mkconfig 命令使得参数设�
 grub2-mkconfig  -o /boot/grub2/grub.cf
 ```
 
+
+
+## 更换镜像源
+
+
+
+
 ## docker安装
 
 [github 文档](https://github.com/laneston/blog/blob/main/container/dorcker_install.md)
 
 [csdn 文档](https://blog.csdn.net/weixin_39177986/article/details/124027595)
+
+
