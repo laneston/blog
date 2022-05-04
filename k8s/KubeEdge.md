@@ -88,6 +88,61 @@ grub2-mkconfig  -o /boot/grub2/grub.cf
 
 ## 更换镜像源
 
+[更换华为源 - github](https://github.com/laneston/blog/blob/main/linuxSystem/HUAWEI_repository.md)
+
+
+## 时间同步
+
+CentOS 8 系统做了不少更新，例如 nftables 代替iptables, dnf 代替yum成为默认包管理工具。这不，许多人发现CentOS 7 熟悉的 ntpdate 命令没有了，也不能用 yum 安装上，同步时间顿时成了一个难题。Chrony是一个开源软件，能用来于时钟服务器（NTP）同步，从而保持系统时间精确。
+
+
+```
+yum install -y chrony
+```
+
+vim /etc/chrony.conf
+```
+# Use public servers from the pool.ntp.org project.
+# Please consider joining the pool (http://www.pool.ntp.org/join.html).
+##pool 2.centos.pool.ntp.org iburst
+
+server 210.72.145.44 iburst
+server ntp.aliyun.com iburst
+```
+
+
+重启服务
+```
+systemctl restart chronyd.service
+```
+
+进行时间同步
+```
+chronyc sources -v
+```
+
+
+
+## 允许 iptables 检查桥接流量
+
+确保 br_netfilter 模块被加载。这一操作可以通过运行 lsmod | grep br_netfilter 来完成。若要显式加载该模块，可执行 sudo modprobe br_netfilter。
+
+为了让你的 Linux 节点上的 iptables 能够正确地查看桥接流量，你需要确保在你的 sysctl 配置中将 net.bridge.bridge-nf-call-iptables 设置为 1。例如：
+
+```
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+br_netfilter
+EOF
+
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sudo sysctl --system
+```
+
+## 开放端口
+
 
 
 
@@ -98,3 +153,27 @@ grub2-mkconfig  -o /boot/grub2/grub.cf
 [csdn 文档](https://blog.csdn.net/weixin_39177986/article/details/124027595)
 
 
+## 安装 kubectl
+
+Kubernetes 命令行工具，kubectl，使得你可以对 Kubernetes 集群运行命令。 你可以使用 kubectl 来部署应用、监测和管理集群资源以及查看日志。
+
+<div align="center"><img src="https://github.com/laneston/Pictures/blob/master/Post-KubeEdge/kubectl_install.png"></div>
+
+
+```
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+curl -LO https://dl.k8s.io/release/v1.23.0/bin/linux/amd64/kubectl
+curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+kubectl version --client
+kubectl version --client --output=yaml
+```
+
+可以参考 [在 Linux 系统中安装并设置 kubectl](https://kubernetes.io/zh/docs/tasks/tools/install-kubectl-linux/) 文档进行其他方式的安装设置方式。
+
+
+## 安装 kubeadm
+
+
+# 安装 kubelet
