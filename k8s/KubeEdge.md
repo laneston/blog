@@ -86,6 +86,7 @@ grub2-mkconfig  -o /boot/grub2/grub.cf
 
 
 
+
 ## 更换镜像源
 
 [更换华为源 - github](https://github.com/laneston/blog/blob/main/linuxSystem/HUAWEI_repository.md)
@@ -143,17 +144,31 @@ sudo sysctl --system
 
 ## 开放端口
 
-
+| 协议  | 方向  |  端口范围   | 目的                    |          使用者          |
+| :---: | :---: | :---------: | :---------------------- | :----------------------: |
+|  TCP  | 入站  |    6443     | Kubernetes API server   |           所有           |
+|  TCP  | 入站  |  2379-2380  | etcd server client      | API	kube-apiserver, etcd |
+|  TCP  | 入站  |    10250    | Kubelet API             |       自身, 控制面       |
+|  TCP  | 入站  |    10259    | kube-scheduler          |           自身           |
+|  TCP  | 入站  |    10257    | kube-controller-manager |           自身           |
+|  TCP  | 入站  |    10250    | Kubelet API             |       自身, 控制面       |
+|  TCP  | 入站  | 30000-32767 | NodePort Services       |           所有           |
 
 
 ## docker安装
+
+关于docker的安装可以参考我写的以下文档：
 
 [github 文档](https://github.com/laneston/blog/blob/main/container/dorcker_install.md)
 
 [csdn 文档](https://blog.csdn.net/weixin_39177986/article/details/124027595)
 
 
+
+
 ## 安装 kubectl
+
+以下是单独安装 kubectl 的方式，可以在重装时使用。
 
 Kubernetes 命令行工具，kubectl，使得你可以对 Kubernetes 集群运行命令。 你可以使用 kubectl 来部署应用、监测和管理集群资源以及查看日志。
 
@@ -173,7 +188,60 @@ kubectl version --client --output=yaml
 可以参考 [在 Linux 系统中安装并设置 kubectl](https://kubernetes.io/zh/docs/tasks/tools/install-kubectl-linux/) 文档进行其他方式的安装设置方式。
 
 
-## 安装 kubeadm
+---------------------------------
 
 
-# 安装 kubelet
+## 安装 kubeadm kubectl kubelet
+
+1. 如果需要进行备份，则 **备份/etc/yum.repos.d/kubernetes.repo文件:**
+
+```
+cp /etc/yum.repos.d/kubernetes.repo /etc/yum.repos.d/kubernetes.repo.bak
+```
+
+2. 修改/etc/yum.repos.d/kubernetes.repo文件：
+
+华为源，
+```
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://repo.huaweicloud.com/kubernetes/yum/repos/kubernetes-el7-$basearch
+enabled=1
+gpgcheck=1
+repo_gpgcheck=0
+gpgkey=https://repo.huaweicloud.com/kubernetes/yum/doc/yum-key.gpg https://repo.huaweicloud.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+```
+
+阿里源
+```
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+```
+
+**提示 若您使用的yum中变量 $basearch 无法解析, 请把第二步配置文件中的$basearch修改为相应系统架构(aarch64/armhfp/ppc64le/s390x/x86_64).**
+
+
+3. SELinux运行模式切换为宽容模式
+
+
+```
+setenforce 0
+```
+
+4. 更新索引文件
+
+```
+yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+systemctl enable --now kubelet
+```
+
+
