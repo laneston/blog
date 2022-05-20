@@ -201,7 +201,7 @@ cp /etc/yum.repos.d/kubernetes.repo /etc/yum.repos.d/kubernetes.repo.bak
 
 2. 修改/etc/yum.repos.d/kubernetes.repo文件：
 
-华为源，
+华为源，比较老旧，不推荐。
 ```
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -214,7 +214,7 @@ gpgkey=https://repo.huaweicloud.com/kubernetes/yum/doc/yum-key.gpg https://repo.
 EOF
 ```
 
-阿里源
+阿里源，推荐使用。
 ```
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
