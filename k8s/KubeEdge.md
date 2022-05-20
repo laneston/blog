@@ -239,8 +239,10 @@ setenforce 0
 
 4. 更新索引文件
 
+
+
 ```
-yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+yum install -y kubelet-1.19.16 kubeadm-1.19.16 kubectl-1.19.16 --disableexcludes=kubernetes
 systemctl enable --now kubelet
 ```
 
