@@ -122,6 +122,12 @@ systemctl restart chronyd.service
 chronyc sources -v
 ```
 
+## 安装流量控制器
+
+```
+yum install -y iproute-tc
+```
+
 
 
 ## 允许 iptables 检查桥接流量
@@ -134,11 +140,14 @@ chronyc sources -v
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 br_netfilter
 EOF
-
+```
+```
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 EOF
+```
+```
 sudo sysctl --system
 ```
 
@@ -165,6 +174,7 @@ sudo sysctl --system
 
 
 
+------------------------------
 
 ## 安装 kubectl
 
@@ -242,8 +252,9 @@ setenforce 0
 
 
 ```
-yum install -y kubelet-1.19.16 kubeadm-1.19.16 kubectl-1.19.16 --disableexcludes=kubernetes
-systemctl enable --now kubelet
+yum install -y kubelet-1.22.9 kubeadm-1.22.9 kubectl-1.22.9 --disableexcludes=kubernetes
+systemctl enable kubelet
+systemctl start kubelet
 ```
 
 

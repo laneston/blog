@@ -11,26 +11,6 @@ yum list installed | grep kubectl
 ```
 
 
-执行 kubeadm init 命令时遇到以下问题：
-
-```
-# kubeadm init
-[init] Using Kubernetes version: v1.24.0
-[preflight] Running pre-flight checks
-        [WARNING FileExisting-tc]: tc not found in system path
-error execution phase preflight: [preflight] Some fatal errors occurred:
-        [ERROR CRI]: container runtime is not running: output: time="2022-05-17T11:09:36+08:00" level=fatal msg="getting status of runtime: rpc error: code = Unimplemented desc = unknown service runtime.v1alpha2.RuntimeService", error: exit status 1
-        [ERROR FileContent--proc-sys-net-ipv4-ip_forward]: /proc/sys/net/ipv4/ip_forward contents are not set to 1
-[preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
-To see the stack trace of this error execute with --v=5 or higher
-```
-
-打印信息中显示了1句警告和2句错误提示，我们先解决警告信息：
-
-```
-dnf install -y iproute-tc
-```
-
 ## 容器运行时
 
 
@@ -45,9 +25,11 @@ lxc、runc 和 rkt 是目前主流的三种容器 runtime。
 - runc 是 Docker 自己开发的容器 runtime，符合 oci 规范，也是现在 Docker 的默认 runtime。
 - rkt 是 CoreOS 开发的容器 runtime，符合 oci 规范，因而能够运行 Docker 的容器。
 
+## 镜像拉取
 
+默认情况下, kubeadm 会从 k8s.gcr.io 仓库拉取镜像。如果请求的 Kubernetes 版本是 CI 标签 （例如 ci/latest），则使用 gcr.io/k8s-staging-ci-images。
 
-
+k8s.gcr.io 仓库需要使用外网，建议使用内网支持的镜像库。
 
 
 # 边端部署

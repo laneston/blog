@@ -44,6 +44,7 @@ yum install ./docker-ce-20.10.9-3.el8.x86_64.rpm ./docker-ce-cli-20.10.9-3.el8.x
 ## 启动
 
 ```
+systemctl enable docker
 systemctl start docker
 docker version
 ```
