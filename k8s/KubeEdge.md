@@ -129,6 +129,18 @@ yum install -y iproute-tc
 ```
 
 
+
+## 安装 POD 网络附加组件
+
+你必须部署一个基于 Pod 网络插件的 容器网络接口 (CNI)，以便你的 Pod 可以相互通信。 在安装网络之前，集群 DNS (CoreDNS) 将不会启动。
+
+选用的组件为 falnnel
+
+
+
+
+
+
 ## 修改 docker cgroup 为 systemd
 
 

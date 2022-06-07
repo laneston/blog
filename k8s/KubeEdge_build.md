@@ -70,7 +70,8 @@ docker tag docker.io/k8simage/kube-proxy-amd64:v1.11.3 k8s.gcr.io/kube-proxy-amd
 ## 通过配置文件进行修改
 
 
-可以通过修改配置文件指定镜像下载链接
+可以通过修改配置文件 (kubeadm-defaults.yaml) 指定镜像下载链接
+
 
 
 ```
@@ -90,7 +91,7 @@ localAPIEndpoint:
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
   imagePullPolicy: IfNotPresent
-  name: VM-0-4-centos 
+  name: k8s
   taints: null
 ---
 apiServer:
@@ -112,7 +113,12 @@ networking:
 scheduler: {}
 ```
 
+## 云端部署
 
+
+```
+kubeadm init --config ./kubeadm-defaults.yaml
+```
 
 
 

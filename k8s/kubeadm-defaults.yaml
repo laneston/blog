@@ -14,7 +14,7 @@ localAPIEndpoint:
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
   imagePullPolicy: IfNotPresent
-  name: VM-0-4-centos 
+  name: k8s
   taints: null
 ---
 apiServer:
@@ -29,6 +29,7 @@ etcd:
     dataDir: /var/lib/etcd
 imageRepository: docker.io/k8simage
 kind: ClusterConfiguration
+#修改为当前使用版本号
 kubernetesVersion: 1.22.9
 networking:
   dnsDomain: cluster.local
