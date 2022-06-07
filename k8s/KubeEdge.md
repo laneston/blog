@@ -129,6 +129,12 @@ yum install -y iproute-tc
 ```
 
 
+## 修改 docker cgroup 为 systemd
+
+
+参考文章 [docker 与 systemd](https://github.com/laneston/blog/blob/main/linuxSystem/cgroup_.md)
+
+
 
 ## 允许 iptables 检查桥接流量
 
