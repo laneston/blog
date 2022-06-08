@@ -184,6 +184,15 @@ sudo sysctl --system
 
 ## docker安装
 
+| Kubernetes    版本 |    Docker 版本兼容情况     |
+| :----------------: | :------------------------: |
+|       1.21.x       | v20.10.2   版本以上不兼容  |
+|       1.22.x       | v20.10.2    版本以上不兼容 |
+|       1.23.x       | v20.10.7    版本以上不兼容 |
+
+
+
+
 关于docker的安装可以参考我写的以下文档：
 
 [github 文档](https://github.com/laneston/blog/blob/main/container/dorcker_install.md)
