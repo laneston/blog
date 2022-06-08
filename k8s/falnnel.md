@@ -1,19 +1,88 @@
-## 什么是flannel
+# 什么是 flannel
 
 Flannel是CoreOS团队针对Kubernetes设计的一个网络规划服务，运行在一个网上的网（应用层网络），并不依靠ip地址来传递消息，而是采用一种映射机制，把ip地址和identifiers做映射来资源定位。 简单来说，它的功能是让集群中的不同节点主机创建的Docker容器都具有全集群唯一的虚拟IP地址。
 
 Flannel github：https://github.com/coreos/flannel
 
-
-
-
-## 为什么使用flannel
+## 为什么使用 flannel
 
 在默认的Docker配置中，每个节点上的Docker服务会分别负责所在节点容器的IP分配。这样导致的一个问题是，不同节点上容器可能获得相同的内外IP地址。
 
 Flannel的设计目的就是为集群中的所有节点重新规划IP地址的使用规则，从而使得不同节点上的容器能够获得“同属一个内网”且”不重复的”IP地址，并让属于不同节点上的容器能够直接通过内网IP通信。
 
-## 如何实现flannel
+## 如何实现 flannel
 
 Flannel实质上是一种“覆盖网络(overlay network)”，也就是将TCP数据包装在另一种网络包里面进行路由转发和通信，目前已经支持UDP、VxLAN、AWS VPC和GCE路由等数据转发方式，默认的节点间数据通信方式是UDP转发。
+
+# 安装 flannel
+
+
+-------------------
+
+## 安装 Etcd
+
+因为 flannel 依赖 etcd，所以需要安装 etcd。本次使用的安装包为： etcd-v3.5.4-linux-amd64.tar.gz
+
+
+
+```
+# 解压安装包
+tar -zxvf etcd-v3.5.4-linux-amd64.tar.gz
+cd etcd-v3.5.4-linux-amd64
+cp etcd* /usr/bin/
+```
+
+```
+mkdir /etc/etcd
+vim /etc/etcd/etcd.conf
+```
+
+```
+ETCD_NAME=ETCD_1
+ETCD_DATA_DIR="/var/lib/etcd/"
+ETCD_LISTEN_CLIENT_URLS="http://106.52.179.147:2379"
+ETCD_ADVERTISE_CLIENT_URLS="http://106.52.179.147:2379"
+```
+
+/usr/lib/systemd/system/etcd.service
+```
+[Unit]
+Description=Etcd Server
+After=network.target
+
+[Service]
+Type=simple
+TimeoutStartSec=1
+WorkingDirectory=/var/lib/etcd/
+EnvironmentFile=-/etc/etcd/etcd.conf
+ExecStart=/usr/bin/etcd
+
+[Install]
+WantedBy=multi-user.target
+```
+
+重新加载某个服务的配置文件，如果新安装了一个服务，归属于 systemctl 管理，要是新服务的服务程序配置文件生效，需重新加载:
+
+
+```
+systemctl daemon-reload
+systemctl enable etcd.service
+systemctl start etcd.service
+```
+
+到此 Etcd 安装结束。
+
+
+-----------------
+
+## 在线安装
+
+```
+yum install -y flannel
+```
+
+## 离线安装
+
+
+
 

@@ -55,3 +55,10 @@ deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe m
 deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
 ```
 
+# 镜像源重复
+
+```
+Repository extras is listed more than once in the configuration
+```
+
+进入 /etc/yum.repos.d 并删除对应的镜像源即可。
