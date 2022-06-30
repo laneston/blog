@@ -24,6 +24,9 @@ Kubernetes 推荐使用 systemd 来代替 cgroupfs。因为systemd是Kubernetes�
 ```
 systemctl daemon-reload
 systemctl restart docker
+
+#查看当前管理器模式
+docker info
 ```
 
 

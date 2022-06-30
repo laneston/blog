@@ -1,4 +1,4 @@
-# KubeEdge 保姆式部署攻略
+# kubernetes 保姆式部署攻略
 
 ## 环境配置
 
@@ -89,7 +89,7 @@ grub2-mkconfig  -o /boot/grub2/grub.cf
 
 ## 更换镜像源
 
-[更换华为源 - github](https://github.com/laneston/blog/blob/main/linuxSystem/HUAWEI_repository.md)
+[更换镜像源 - github](https://github.com/laneston/blog/blob/main/linuxSystem/linux_repository.md)
 
 
 ## 时间同步
@@ -129,18 +129,6 @@ yum install -y iproute-tc
 ```
 
 
-
-## 安装 POD 网络附加组件
-
-你必须部署一个基于 Pod 网络插件的 容器网络接口 (CNI)，以便你的 Pod 可以相互通信。 在安装网络之前，集群 DNS (CoreDNS) 将不会启动。
-
-选用的组件为 falnnel
-
-
-
-
-
-
 ## 修改 docker cgroup 为 systemd
 
 
@@ -168,6 +156,7 @@ EOF
 ```
 sudo sysctl --system
 ```
+
 
 ## 开放端口
 
