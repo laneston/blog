@@ -15,6 +15,7 @@ Kubernetes 推荐使用 systemd 来代替 cgroupfs。因为systemd是Kubernetes�
 
 修改docker的/etc/docker/daemon.json文件：
 
+vim /etc/docker/daemon.json
 ```
 {
   "exec-opts": ["native.cgroupdriver=systemd"]

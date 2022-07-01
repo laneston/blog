@@ -8,8 +8,8 @@
 
 ```
 cd /etc/yum.repos.d
-cp CentOS-Base.repo CentOS-Base.repo.bak
-mv CentOS-AppStream.repo CentOS-AppStream.repo.bak
+mv CentOS-Linux-BaseOS.repo CentOS-Linux-BaseOS.repo.bak
+mv CentOS-Linux-AppStream.repo CentOS-Linux-AppStream.repo.bak
 ```
 
 ## 下载新源

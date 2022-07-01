@@ -128,6 +128,23 @@ chronyc sources -v
 yum install -y iproute-tc
 ```
 
+## docker安装
+
+| Kubernetes    版本 |    Docker 版本兼容情况     |
+| :----------------: | :------------------------: |
+|       1.21.x       | v20.10.2   版本以上不兼容  |
+|       1.22.x       | v20.10.2    版本以上不兼容 |
+|       1.23.x       | v20.10.7    版本以上不兼容 |
+
+
+
+
+关于docker的安装可以参考我写的以下文档：
+
+[github 文档](https://github.com/laneston/blog/blob/main/container/dorcker_install.md)
+
+[csdn 文档](https://blog.csdn.net/weixin_39177986/article/details/124027595)
+
 
 ## 修改 docker cgroup 为 systemd
 
@@ -169,25 +186,6 @@ sudo sysctl --system
 |  TCP  | 入站  |    10257    | kube-controller-manager |           自身           |
 |  TCP  | 入站  |    10250    | Kubelet API             |       自身, 控制面       |
 |  TCP  | 入站  | 30000-32767 | NodePort Services       |           所有           |
-
-
-## docker安装
-
-| Kubernetes    版本 |    Docker 版本兼容情况     |
-| :----------------: | :------------------------: |
-|       1.21.x       | v20.10.2   版本以上不兼容  |
-|       1.22.x       | v20.10.2    版本以上不兼容 |
-|       1.23.x       | v20.10.7    版本以上不兼容 |
-
-
-
-
-关于docker的安装可以参考我写的以下文档：
-
-[github 文档](https://github.com/laneston/blog/blob/main/container/dorcker_install.md)
-
-[csdn 文档](https://blog.csdn.net/weixin_39177986/article/details/124027595)
-
 
 
 ------------------------------
