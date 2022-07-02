@@ -3,7 +3,7 @@
 kubernetes 的 [安装过程](https://blog.csdn.net/weixin_39177986/article/details/124807924) 就不在这里细说了，想要了解的可以查看连接中的博客。
 
 
-## 查看工具是否安装
+## 查看 kuberetes 工具是否安装
 
 ```
 yum list installed | grep kubelet
@@ -11,9 +11,7 @@ yum list installed | grep kubeadm
 yum list installed | grep kubectl
 ```
 
-
 ## 容器运行时
-
 
 容器不光是 Docker，还有其他容器，比如 CoreOS 的 rkt。为了保证容器生态的健康发展，保证不同容器之间能够兼容，包含 Docker、CoreOS、Google在内的若干公司共同成立了一个叫 Open Container Initiative（OCI） 的组织，其目是制定开放的容器规范。
 
@@ -43,6 +41,8 @@ k8s.gcr.io/etcd:3.5.0-0
 k8s.gcr.io/coredns/coredns:v1.8.4
 ```
 
+## 默认镜像拉取方式
+
 默认情况下, kubeadm 会从 k8s.gcr.io 仓库拉取镜像。如果请求的 Kubernetes 版本是 CI 标签 （例如 ci/latest），则使用 gcr.io/k8s-staging-ci-images。k8s.gcr.io 仓库需要使用外网，建议使用内网支持的镜像库。使用 dockerhub 下的 k8simage，这个域名下同步了不少谷歌镜像：
 
 ```
@@ -65,14 +65,13 @@ docker tag docker.io/k8simage/kube-proxy-amd64:v1.11.3 k8s.gcr.io/kube-proxy-amd
 
 ## 修改配置文件
 
-获取默认配置文件
+获取默认配置文件并保存至本地
 
 ```
 kubeadm config print init-defaults > kubeadm-defaults.yaml
 ```
 
-
-可以通过修改配置文件 (kubeadm-defaults.yaml) 指定镜像下载链接
+可以通过修改配置文件 (kubeadm-defaults.yaml) 指定镜像下载链接，以下是本设备使用的一个配置文件内容，可用作与参考：
 
 ```
 apiVersion: kubeadm.k8s.io/v1beta3
@@ -122,23 +121,34 @@ apiVersion: kubelet.config.k8s.io/v1beta3
 #修改kubelet驱动
 cgroupDriver: systemd
 ```
-
-引用配置文件
-
+可以引用：
 [kubeadm-defaults.yaml 配置文件样例](https://github.com/laneston/blog/blob/main/k8s/kubeadm-defaults.yaml)
+并执行:
 
 ```
 kubeadm init --config ./kubeadm-defaults.yaml
 ```
 
 
-## 错误打印
+# 错误处理
+
+## 问题01 ip_forward不为1
 
 ```
-[root@VM-16-6-centos ~]# systemctl show --property=Environment kubelet |cat
-Environment=[unprintable] KUBELET_CONFIG_ARGS=--config=/var/lib/kubelet/config.yaml
+[ERROR FileContent--proc-sys-net-ipv4-ip_forward]: /proc/sys/net/ipv4/ip_forward contents are not set to 1
+```
+查看ip_forward：
+```
+cat /proc/sys/net/ipv4/ip_forward
+```
+确实不为1
+
+设置：
+```
+echo 1 > /proc/sys/net/ipv4/ip_forward
 ```
 
+## 问题02 初始化提示The kubelet is not running
 
 ```
    Unfortunately, an error has occurred:
@@ -163,6 +173,28 @@ Environment=[unprintable] KUBELET_CONFIG_ARGS=--config=/var/lib/kubelet/config.y
 error execution phase wait-control-plane: couldn't initialize a Kubernetes cluster
 To see the stack trace of this error execute with --v=5 or higher
 ```
+
+配置文件中带有字段：
+```
+nodeRegistration:
+  criSocket: /var/run/dockershim.sock
+  imagePullPolicy: IfNotPresent
+  name: node
+  taints: null
+```
+
+## 问题03 Unable to update cni config" err="no networks found in /etc/cni/net.d
+
+```
+Jul 02 10:48:45 VM-0-4-centos kubelet[178540]: I0702 10:48:45.239162  178540 cni.go:239] "Unable to update cni config" err="no networks found in /etc/cni/net.d"
+Jul 02 10:48:47 VM-0-4-centos kubelet[178540]: E0702 10:48:47.270449  178540 kubelet.go:2376] "Container runtime network not ready" networkReady="NetworkReady=false reason:NetworkPluginNotReady message:docker: network plugin is not ready: cni config uninitialized"
+```
+
+解决方案是 [安装 flannel 组件](#flannel)
+
+
+
+
 
 ## 重置 kubeadm 配置
 
@@ -251,12 +283,31 @@ kubeadm join 172.16.16.6:6443 --token abcdef.0123456789abcdef \
         --discovery-token-ca-cert-hash sha256:346df63942aaaae451e35c51990562ac9a543111c277b0a6ed6daef24a02f571 
 ```
 
+# 安装 flannel 组件
+<a id='flannel'></a>
 
-## 安装 flannel 组件
+部署文件路径如下：https://github.com/flannel-io/flannel/blob/master/Documentation/kube-flannel.yml
 
-错误警告
+将文件下载至本地后可以通过以下命令进行安装：
+```
+kubectl apply -f kube-flannel.yml
+```
+
+此时可能会弹出以下错误警告信息：
 
 ```
-[root@VM-16-6-centos kube_config]# kubectl apply -f kube-flannel-aliyun.yml 
 The connection to the server localhost:8080 was refused - did you specify the right host or port?
+```
+
+原因：kubernetes master没有与本机绑定，集群初始化的时候没有绑定，此时设置在本机的环境变量即可解决问题。
+
+解决办法：
+```
+echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> /etc/profile
+source /etc/profile
+```
+
+再执行：
+```
+kubectl apply -f kube-flannel.yml
 ```
