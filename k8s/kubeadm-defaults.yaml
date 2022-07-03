@@ -23,6 +23,7 @@ etcd:
     dataDir: /var/lib/etcd
 networking:
   dnsDomain: cluster.local
+  podSubnet: "10.244.0.0/24"
   serviceSubnet: 10.96.0.0/12
 apiServer:
   timeoutForControlPlane: 4m0s

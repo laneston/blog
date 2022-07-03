@@ -89,7 +89,7 @@ nodeRegistration:
   imagePullPolicy: IfNotPresent
   taints: null
 localAPIEndpoint:
-  advertiseAddress: 172.16.16.6 (如果使用服务器部署，此处应是内网IP)
+  advertiseAddress: 172.16.16.6
   bindPort: 6443
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
@@ -99,6 +99,7 @@ etcd:
     dataDir: /var/lib/etcd
 networking:
   dnsDomain: cluster.local
+  podSubnet: "10.244.0.0/24"
   serviceSubnet: 10.96.0.0/12
 apiServer:
   timeoutForControlPlane: 4m0s
@@ -174,7 +175,7 @@ error execution phase wait-control-plane: couldn't initialize a Kubernetes clust
 To see the stack trace of this error execute with --v=5 or higher
 ```
 
-配置文件中带有字段：
+配置文件中带有字段 name ，且与 node 不符合：
 ```
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
@@ -192,8 +193,20 @@ Jul 02 10:48:47 VM-0-4-centos kubelet[178540]: E0702 10:48:47.270449  178540 kub
 
 解决方案是 [安装 flannel 组件](#flannel)
 
+## 问题03 networkPlugin cni failed to set up pod
 
+```
+"RunPodSandbox from runtime service failed" err="rpc error: code = Unknown desc = failed to set up sandbox container \"a735b231c34fed86068e61a4873bd8f4034fbd8e158765d62e86ca81646e6a51\" network for pod \"coredns-57bb6f6c5-79qjc\": networkPlugin cni failed to set up pod \"coredns-57bb6f6c5-z7zcc_kube-system\" network: open /run/flannel/subnet.env: no such file or directory"
+```
 
+原因是缺少：
+
+```
+networking:
+  dnsDomain: cluster.local
+  podSubnet: "10.244.0.0/24"
+  serviceSubnet: 10.96.0.0/12
+```
 
 
 ## 重置 kubeadm 配置
@@ -307,7 +320,40 @@ echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> /etc/profile
 source /etc/profile
 ```
 
+or
+
+```
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
 再执行：
 ```
 kubectl apply -f kube-flannel.yml
 ```
+
+
+
+# 成功执行
+
+```
+[root@VM-16-6-centos home]# kubectl get pods -A              
+NAMESPACE     NAME                                     READY   STATUS    RESTARTS   AGE
+kube-system   coredns-57bb6f6c5-7jrt5                  1/1     Running   0          9m26s
+kube-system   coredns-57bb6f6c5-tdnxx                  1/1     Running   0          9m26s
+kube-system   etcd-vm-16-6-centos                      1/1     Running   1          9m40s
+kube-system   kube-apiserver-vm-16-6-centos            1/1     Running   1          9m40s
+kube-system   kube-controller-manager-vm-16-6-centos   1/1     Running   0          9m40s
+kube-system   kube-flannel-ds-9r2g9                    1/1     Running   0          2m22s
+kube-system   kube-proxy-qpqbm                         1/1     Running   0          9m26s
+kube-system   kube-scheduler-vm-16-6-centos            1/1     Running   1          9m40s
+```
+
+
+kubeadm certs check-expiration
+
+
+
+
+
