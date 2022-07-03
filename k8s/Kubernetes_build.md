@@ -204,7 +204,7 @@ Jul 02 10:48:47 VM-0-4-centos kubelet[178540]: E0702 10:48:47.270449  178540 kub
 ```
 networking:
   dnsDomain: cluster.local
-  podSubnet: "10.244.0.0/24"
+  podSubnet: "10.244.0.0/16"
   serviceSubnet: 10.96.0.0/12
 ```
 

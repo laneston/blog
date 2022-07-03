@@ -103,12 +103,14 @@ yum install -y chrony
 
 vim /etc/chrony.conf
 ```
-# Use public servers from the pool.ntp.org project.
-# Please consider joining the pool (http://www.pool.ntp.org/join.html).
-##pool 2.centos.pool.ntp.org iburst
-
 server 210.72.145.44 iburst
 server ntp.aliyun.com iburst
+
+server time1.tencentyun.com iburst
+server time2.tencentyun.com iburst
+server time3.tencentyun.com iburst
+server time4.tencentyun.com iburst
+server time5.tencentyun.com iburst
 ```
 
 
