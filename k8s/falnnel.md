@@ -137,3 +137,28 @@ FLANNEL_ETCD_PREFIX="/kube-centos/network"
 # Any additional options that you want to pass
 FLANNEL_OPTIONS="-etcd-cafile=/etc/kubernetes/ssl/ca.pem -etcd-certfile=/etc/kubernetes/ssl/kubernetes.pem -etcd-keyfile=/etc/kubernetes/ssl/kubernetes-key.pem"
 ```
+
+
+
+
+CNI 全称是 Container Network Interface，即容器网络的 API 接口。实现了这个接口的就是 CNI 插件，它实现了一系列的 CNI API 接口。常见的 CNI 插件包括 Calico、flannel、Terway、Weave Net 以及 Contiv。
+
+
+K8s 通过 CNI 配置文件来决定使用什么 CNI。
+
+
+## 使用 kubectl 在线安装
+
+```
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+```
+## 使用 kubectl 离线安装
+
+```
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+```
+
+
+
+

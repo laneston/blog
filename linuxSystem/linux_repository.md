@@ -57,6 +57,12 @@ deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe m
 deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
 ```
 
+
+```
+sudo apt-get update
+sudo apt-get upgrade
+```
+
 # 镜像源重复
 
 ```

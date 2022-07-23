@@ -11,6 +11,18 @@ yum list installed | grep kubeadm
 yum list installed | grep kubectl
 ```
 
+<<<<<<< Updated upstream
+=======
+## 检查 MAC 与 product_uuid
+
+使用命令 ip link 或 ifconfig -a 来获取网络接口的 MAC 地址
+使用 sudo cat /sys/class/dmi/id/product_uuid 命令对 product_uuid 校验
+一般来讲，硬件设备会拥有唯一的地址，但是有些虚拟机的地址可能会重复。 Kubernetes 使用这些值来唯一确定集群中的节点。 如果这些值在每个节点上不唯一，可能会导致安装失败
+
+
+
+
+>>>>>>> Stashed changes
 ## 容器运行时
 
 容器不光是 Docker，还有其他容器，比如 CoreOS 的 rkt。为了保证容器生态的健康发展，保证不同容器之间能够兼容，包含 Docker、CoreOS、Google在内的若干公司共同成立了一个叫 Open Container Initiative（OCI） 的组织，其目是制定开放的容器规范。

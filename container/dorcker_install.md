@@ -38,7 +38,7 @@ sudo yum install yum-utils device-mapper-persistent-data lvm2
 
 ```
 yum install ./containerd.io-1.5.11-3.1.el8.x86_64.rpm
-yum install ./docker-ce-20.10.9-3.el8.x86_64.rpm ./docker-ce-cli-20.10.9-3.el8.x86_64.rpm ./docker-scan-plugin-0.17.0-3.el8.x86_64.rpm ./docker-ce-rootless-extras-20.10.14-3.el8.x86_64.rpm ./docker-compose-plugin-2.3.3-3.el8.x86_64.rpm 
+yum install ./docker-ce-20.10.9-3.el8.x86_64.rpm ./docker-ce-cli-20.10.9-3.el8.x86_64.rpm ./docker-scan-plugin-0.17.0-3.el8.x86_64.rpm ./docker-ce-rootless-extras-20.10.14-3.el8.x86_64.rpm ./docker-compose-plugin-2.3.3-3.el8.x86_64.rpm
 ```
 
 ## 启动
@@ -102,6 +102,14 @@ https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/
 sudo apt-get update
 sudo apt-get install ./containerd.io_1.5.11-1_amd64.deb
 sudo apt-get install ./docker-ce-cli_20.10.9_3-0_ubuntu-bionic_amd64.deb ./docker-ce_20.10.9_3-0_ubuntu-bionic_amd64.deb ./docker-scan-plugin_0.17.0_ubuntu-bionic_amd64.deb ./docker-ce-rootless-extras_20.10.9_3-0_ubuntu-bionic_amd64.deb ./docker-compose-plugin_2.3.3_ubuntu-bionic_amd64.deb
+```
+
+
+
+
+```
+sudo apt-get install ./containerd.io_1.6.6-1_amd64.deb
+sudo apt-get install ./docker-ce-cli_20.10.17_3-0_ubuntu-jammy_amd64.deb ./docker-ce_20.10.17_3-0_ubuntu-jammy_amd64.deb ./docker-scan-plugin_0.17.0_ubuntu-jammy_amd64.deb ./docker-ce-rootless-extras_20.10.17_3-0_ubuntu-jammy_amd64.deb ./docker-compose-plugin_2.6.0_ubuntu-jammy_amd64.deb
 ```
 
 启动 docker:
